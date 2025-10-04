@@ -63,7 +63,7 @@ public class ActionList : MonoBehaviour
 
     public void AddScaleAction(Vector3 Goal, GameObject target, float TimeToComplete = 1, int id = 0, float delay = 0, bool block = false, BaseAction.EaseType ease = BaseAction.EaseType.Linear)
     {
-        AddAction(new RotateAction(Goal, target, id, TimeToComplete, delay, block, ease));
+        AddAction(new ScaleAction(Goal, target, id, TimeToComplete, delay, block, ease));
     }
 
     void AddAction(BaseAction action)
@@ -213,9 +213,11 @@ public class RotateAction : BaseAction
 
                 firstTime = false;
             }
-            Vector3 angle = StartAngle + (EndAngle - StartAngle) * Percent;
-
-            obj.transform.rotation = Quaternion.Euler(angle);
+            //Vector3 angle = StartAngle + (EndAngle - StartAngle) * Percent;
+            var x = StartAngle.x + (EndAngle.x - StartAngle.x) * Percent;
+            var y = StartAngle.y + (EndAngle.y - StartAngle.y) * Percent;
+            var z = StartAngle.z + (EndAngle.z - StartAngle.z) * Percent;
+            obj.transform.eulerAngles = new Vector3(x, y, z);
             if (Percent >= 1)
             {
                 return ActionResult.Success;
