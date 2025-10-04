@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class CharacterCtrl : MonoBehaviour
 {
@@ -11,17 +12,46 @@ public class CharacterCtrl : MonoBehaviour
     public float groundCheckDistance = 1.9f; // Raycast distance for ground check
     public float crossCheckDistance = 1.0f; // Raycast distance for cross platform check
 
+    [Header("Scale Effect Settings")]
+    public Vector3 jumpScale = new Vector3(0.8f, 1.2f, 1f); // 跳跃时的缩放：瘦长
+    public Vector3 landScale = new Vector3(1.2f, 0.8f, 1f); // 落地时的缩放：矮胖
+    public float jumpScaleDuration = 0.2f; // 跳跃缩放动画时长
+    public float landScaleDuration = 0.15f; // 落地缩放动画时长
+    public float landRecoverDuration = 0.5f; // 落地后恢复正常的时长
+
+    [Header("Raycast Settings")]
+    public Vector2 groundCheckOffset = Vector2.zero; // 射线检测起点的偏移量
+
     private Rigidbody2D rb;
     private bool isGrounded = false;
+    private bool wasGrounded = false; // 用于检测落地瞬间
+    private Vector3 originalScale = Vector3.one; // 存储原始缩放
+    private int currentFacingDirection = 1; // 1 = right, -1 = left
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        originalScale = new Vector3(1, 1, 1); // 保存原始缩放（不含翻转）
+        currentFacingDirection = transform.localScale.x > 0 ? 1 : -1;
     }
 
     void Update()
     {
+        CheckGroundWithRaycast();
         Move();
+        CheckLanding();
+    }
+
+    private void CheckGroundWithRaycast()
+    {
+        // 使用射线检测地面，不受scale变化影响
+        Vector2 origin = (Vector2)transform.position + groundCheckOffset;
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, groundCheckDistance, groundLayer);
+        
+        isGrounded = hit.collider != null;
+        
+        // 可选：在Scene视图中绘制调试射线
+        Debug.DrawRay(origin, Vector2.down * groundCheckDistance, isGrounded ? Color.green : Color.red);
     }
 
     private void Move()
@@ -31,12 +61,14 @@ public class CharacterCtrl : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             moveInput = -1f;
-            transform.localScale = new Vector3(-1, 1, 1); // Face left
+            currentFacingDirection = -1;
+            ApplyFacingDirection();
         }
         else if (Input.GetKey(KeyCode.D))
         {
             moveInput = 1f;
-            transform.localScale = new Vector3(1, 1, 1); // Face right
+            currentFacingDirection = 1;
+            ApplyFacingDirection();
         }
         Vector2 velocity = rb.velocity;
         velocity.x = moveInput * MoveSpeed;
@@ -52,24 +84,41 @@ public class CharacterCtrl : MonoBehaviour
     private void Jump()
     {
         rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+        
+        // 跳跃时变瘦长的动画
+        DOTween.Kill(transform); // 杀死当前transform上的所有Tween，避免冲突
+        Vector3 targetScale = new Vector3(jumpScale.x * currentFacingDirection, jumpScale.y, jumpScale.z);
+        transform.DOScale(targetScale, jumpScaleDuration).SetEase(Ease.OutQuad);
     }
 
-    // Per-frame ground check
-    private void OnCollisionStay2D(Collision2D collision)
+    private void CheckLanding()
     {
-        // Check if the collided object is in the groundLayer
-        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
+        // 检测从空中到地面的瞬间
+        if (isGrounded && !wasGrounded)
         {
-            isGrounded = true;
+            OnLand();
         }
+        wasGrounded = isGrounded;
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnLand()
     {
-        // Reset isGrounded when leaving the ground
-        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
-        {
-            isGrounded = false;
-        }
+        // 落地时先变矮胖，然后恢复正常
+        DOTween.Kill(transform); // 杀死当前transform上的所有Tween
+        
+        Vector3 landScaleWithDirection = new Vector3(landScale.x * currentFacingDirection, landScale.y, landScale.z);
+        Vector3 normalScaleWithDirection = new Vector3(originalScale.x * currentFacingDirection, originalScale.y, originalScale.z);
+        
+        // 创建落地缩放序列
+        Sequence landSequence = DOTween.Sequence();
+        landSequence.Append(transform.DOScale(landScaleWithDirection, landScaleDuration).SetEase(Ease.OutQuad));
+        landSequence.Append(transform.DOScale(normalScaleWithDirection, landRecoverDuration).SetEase(Ease.OutBack));
+    }
+
+    private void ApplyFacingDirection()
+    {
+        // 应用朝向，同时保持当前的Y和Z缩放
+        Vector3 currentScale = transform.localScale;
+        transform.localScale = new Vector3(Mathf.Abs(currentScale.x) * currentFacingDirection, currentScale.y, currentScale.z);
     }
 }
