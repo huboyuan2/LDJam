@@ -79,7 +79,15 @@ public class CharacterCtrl : MonoBehaviour
     private Transform currentPlatform; // Current moving platform we're standing on
     private Vector3 lastPlatformPosition; // Last frame platform world position
     private Quaternion lastPlatformRotation; // Last frame platform rotation (optional)
-
+    private bool canDash = true;
+    private bool isDashing;
+    [Tooltip("Determine how far the player dashes")]
+    public float dashingPower = 24f;
+    [Tooltip("Time during which dash is active and player can't do inputs")]
+    public float dashingTime = 0.2f;
+    [Tooltip("How long before they can dash again, granted that they still have charges left")]
+    public float dashingCooldown = 1f;
+    private CharacterModule abilities;
     private bool HasBufferedJump()
     {
         if (_bufferedJumpUsable)
@@ -107,10 +115,15 @@ public class CharacterCtrl : MonoBehaviour
         currentFacingDirection = transform.localScale.x > 0 ? 1 : -1;
         _bufferedJumpUsable = false;
         _timeJumpWasPressed = float.NegativeInfinity; // so the check is false at spawn
+        abilities = GetComponent<CharacterModule>();
     }
 
     void Update()
     {
+        if (isDashing)
+        {
+            return;
+        }
         velocityY = rb.velocity.y;
         _time += Time.deltaTime;
         GatherInput();
@@ -118,6 +131,10 @@ public class CharacterCtrl : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isDashing)
+        {
+            return;
+        }
         CheckCollisions();
         HandleMovingPlatform();
         HandleJump();
@@ -386,8 +403,27 @@ public class CharacterCtrl : MonoBehaviour
             _jumpToConsume = true;
             _timeJumpWasPressed = _time;
         }
+        if (abilities.SkillDash > 0 && canDash && Input.GetKeyDown(KeyCode.LeftShift) )
+        {
+            StartCoroutine(Dash());
+        }
     }
+    private IEnumerator Dash()
+    {
+        canDash = false;
+        isDashing = true;
+        abilities.SkillDash -= 1;
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+        rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
 
+        yield return new WaitForSeconds(dashingTime);
+
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
+    }
     private void ApplyFacingDirection()
     {
         // Apply facing direction while maintaining current Y and Z scale
