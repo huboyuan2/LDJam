@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal; // or HighDefinition
 public class ActionList : MonoBehaviour
 {
     public List<BaseAction> list;
@@ -70,7 +71,10 @@ public class ActionList : MonoBehaviour
     {
         AddAction(new ShakeAction(target, magnitude, TimeToComplete, id, delay, opa, block, ease));
     }
-
+    public void AddCamVigAction(GameLogic mgr, Volume volume, float Duration, float vig, float ca, int id, float _delay, bool block = false)
+    {
+        AddAction(new CamVignetteAction(mgr, volume, Duration, vig, ca, id, _delay, block));
+    }
     void AddAction(BaseAction action)
     {
         list.Add(action);
@@ -135,6 +139,82 @@ public class ActionList : MonoBehaviour
         }
     }
 }
+
+public class CamVignetteAction : BaseAction
+{
+    Volume target;
+    VolumeProfile _original;
+    float _vig;
+    float _ca;
+    float _oldWeight;
+    GameLogic reference;
+    bool FirstTime;
+    // Start is called before the first frame update
+    public CamVignetteAction(GameLogic mgr, Volume volume, float Duration, float vig, float ca, int id, float _delay, bool block = false)
+    {
+        reference = mgr;
+        target = volume;
+        _vig = vig;
+        _ca = ca;
+        FirstTime = true;
+        this.LifeSpan = Duration;
+        this.delay = _delay;
+
+        groupID = id;
+        Block = block;
+    }
+    // Update is called once per frame
+    public override ActionResult Update(float dt)
+    {
+        if (delay <= 0)
+        {
+            if (FirstTime)
+            {
+                _original = target.profile;
+                if (_original.TryGet(out Vignette vig))
+                {
+                    vig.active = true;
+                    vig.intensity.Override(_vig);   // sets value + overrideState=true
+                    vig.smoothness.Override(0.2f);
+                }
+
+                if (_original.TryGet(out ChromaticAberration ca))
+                {
+                    ca.active = true;
+                    ca.intensity.Override(_ca);
+                }
+                firstTime = false;
+            }
+            if (reference.current != GameLogic.TimeState.Paused)
+            {
+                _original = target.profile;
+                if (_original.TryGet(out Vignette vig))
+                {
+                    vig.active = false;
+                    vig.intensity.Override(0);   // sets value + overrideState=true
+                    vig.smoothness.Override(0);
+                }
+                if (_original.TryGet(out ChromaticAberration ca))
+                {
+                    ca.active = false;
+                    ca.intensity.Override(0);
+                }
+                return ActionResult.Success;
+            }
+            else
+            {
+                return ActionResult.OnGoing;
+            }
+        }
+        else
+        {
+            delay -= Time.deltaTime;
+            return ActionResult.OnGoing;
+        }
+    }
+
+}
+
 
 public class ShakeAction : BaseAction
 {

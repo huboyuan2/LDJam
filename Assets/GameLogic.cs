@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal; // or HighDefinition
 public class GameLogic : MonoBehaviour
 {
     GameObject player;
@@ -9,9 +10,11 @@ public class GameLogic : MonoBehaviour
     public enum TimeState
     {
         Reversing,
-        Advancing
+        Advancing,
+        Paused
     }
     public TimeState current = TimeState.Reversing;
+    TimeState saved;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,31 +22,40 @@ public class GameLogic : MonoBehaviour
         actionList = GetComponent<ActionList>();
     }
 
+    public void pauseTime()
+    {
+        saved = current;
+        current = TimeState.Paused;
 
+        Volume volume = FindFirstObjectByType<Volume>();
+        if (volume)
+        {
+            CamVignetteAction(this, volume, 0, 0.35f, 0.5f, 4);
+        }
+
+    }
+
+    public void returnTimeState()
+    {
+        current = saved;
+    }
 
     // Update is called once per frame
     void Update()
     {
+        if (current == TimeState.Paused)
+        {
+            return;
+        }
         //just testing
         if (Input.GetKeyDown(KeyCode.K))
         {
             if (current == TimeState.Reversing)
             {
-                ////MoveObj(player.transform.position * 2, player, 1, 0, 0, false);
-                //GameObject[] platforms = GameObject.FindGameObjectsWithTag("TimeManipulatedPlatform");
-                //foreach (var item in platforms)
-                //{
-                //    item.GetComponent<TimeBlock>().Advance();
-                //}
                 current = TimeState.Advancing;
             }
             else if (current == TimeState.Advancing)
             {
-                //GameObject[] platforms = GameObject.FindGameObjectsWithTag("TimeManipulatedPlatform");
-                //foreach (var item in platforms)
-                //{
-                //    item.GetComponent<TimeBlock>().Revert();
-                //}
                 current = TimeState.Reversing;
             }
         }
@@ -69,4 +81,8 @@ public class GameLogic : MonoBehaviour
         actionList.AddShakeAction(target, magnitude, TimeToComplete, id, delay, opa, block, ease);
     }
 
+    public void CamVignetteAction(GameLogic mgr, Volume volume, float Duration, float vig, float ca, int id, float _delay = 0, bool block = false)
+    {
+        actionList.AddCamVigAction(mgr, volume, Duration, vig, ca, id, _delay, block);
+    }
 }
