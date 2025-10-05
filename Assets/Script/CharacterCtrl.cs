@@ -440,10 +440,10 @@ public class CharacterCtrl : MonoBehaviour
     private IEnumerator TimeStop()
     {
         abilities.SkillStop -= 1;
- //       manager.pauseTime();
+        manager.pauseTime();
         abilities.canStop = false;
         yield return new WaitForSeconds(abilities.TimeStopDuration);
- //       manager.returnTimeState();
+        manager.returnTimeState();
         abilities.canStop = true;
     }
 
