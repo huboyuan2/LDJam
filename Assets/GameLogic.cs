@@ -63,4 +63,10 @@ public class GameLogic : MonoBehaviour
     {
         actionList.AddScaleAction(Goal, target, TimeToComplete, id, delay, block, ease);
     }
+
+    public void ShakeObj(GameObject target, float magnitude, float TimeToComplete = 1, int id = 0, float delay = 0, float opa = 0, bool block = false, BaseAction.EaseType ease = BaseAction.EaseType.Linear)
+    {
+        actionList.AddShakeAction(target, magnitude, TimeToComplete, id, delay, opa, block, ease);
+    }
+
 }
