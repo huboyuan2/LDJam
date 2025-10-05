@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2750e912e0fdbb4b820fef5ba7751c0, type: 3}
   m_Name: NewTrap
   m_EditorClassIdentifier: 
-  trapModules: []
+  trapModules:
+  - name: 
+    time: -10
+    lethality: 1
+    isProjectile: 0

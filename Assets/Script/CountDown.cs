@@ -24,19 +24,22 @@ public class CountDown : MonoBehaviour
         else if (timeState == TimeState.Rewinding)
            CharacterModule.Instance.TimeLeft += Time.deltaTime;
 
-        string newTimeText = GetTime();
+        string newTimeText = GetTimeText(CharacterModule.Instance.TimeLeft);
         if (newTimeText != timeText)
         {
             timeText = newTimeText;
-            OnTimeChanged?.Invoke(timeText);
+            InvokeTimeChange(timeText);
             //OnTimeStringChanged();
         }
     }
-    //
-    string GetTime()
+    public static void InvokeTimeChange(string newTimeText)
     {
-        int minutes = Mathf.FloorToInt(CharacterModule.Instance.TimeLeft / 60F);
-        int seconds = Mathf.FloorToInt(CharacterModule.Instance.TimeLeft - minutes * 60);
+        OnTimeChanged?.Invoke(newTimeText);
+    }   
+    public static string GetTimeText(float timeLeft)
+    {
+        int minutes = Mathf.FloorToInt(timeLeft / 60F);
+        int seconds = Mathf.FloorToInt(timeLeft - minutes * 60);
         return string.Format("{0:0}:{1:00}", minutes, seconds);
     }
     public enum TimeState

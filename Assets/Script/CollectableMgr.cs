@@ -5,6 +5,8 @@ using UnityEngine;
 public class CollectableMgr : MonoBehaviour
 {
     public CollectableSO collectableSO;
+    public TrapSO trapSO;
+    public PortalSO portalSO;
     private static CollectableMgr _instance;
 
     public static CollectableMgr Instance 

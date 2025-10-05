@@ -171,6 +171,8 @@ public class CharacterModule : MonoBehaviour
     }
     private void OnTimeLeftChanged(float oldValue, float newValue)
     {
+        string newTimeText = CountDown.GetTimeText(newValue);
+        CountDown.InvokeTimeChange(newTimeText);
         // Custom logic for time left changes
     }
 }

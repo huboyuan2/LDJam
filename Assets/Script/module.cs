@@ -19,6 +19,7 @@ public class  TrapModule
     public string name;
     public float time;
     public bool lethality;
+    public bool isProjectile;
 }
 [System.Serializable]
 public class PortalModule
