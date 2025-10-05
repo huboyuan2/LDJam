@@ -67,8 +67,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _amplitude: 0.01
-    - _wavelength: 0.04
+    - _amplitude: 0.02
+    - _pixsize: 0.008
+    - _surfacehight: 0.5
+    - _wavelength: 0.06
     - _wavespeed: 4.1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
