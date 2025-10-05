@@ -6,7 +6,7 @@ using System;
 public class CountDown : MonoBehaviour
 {
     // Start is called before the first frame update
-    float leftTime = 100.0f;
+    //float leftTime = 100.0f;
     string timeText = "1:40";
     public TimeState timeState = TimeState.Running;
 
@@ -20,9 +20,9 @@ public class CountDown : MonoBehaviour
     void Update()
     {
         if (timeState == TimeState.Running)
-            leftTime -= Time.deltaTime;
+           CharacterModule.Instance.TimeLeft -= Time.deltaTime;
         else if (timeState == TimeState.Rewinding)
-            leftTime += Time.deltaTime;
+           CharacterModule.Instance.TimeLeft += Time.deltaTime;
 
         string newTimeText = GetTime();
         if (newTimeText != timeText)
@@ -35,8 +35,8 @@ public class CountDown : MonoBehaviour
     //
     string GetTime()
     {
-        int minutes = Mathf.FloorToInt(leftTime / 60F);
-        int seconds = Mathf.FloorToInt(leftTime - minutes * 60);
+        int minutes = Mathf.FloorToInt(CharacterModule.Instance.TimeLeft / 60F);
+        int seconds = Mathf.FloorToInt(CharacterModule.Instance.TimeLeft - minutes * 60);
         return string.Format("{0:0}:{1:00}", minutes, seconds);
     }
     public enum TimeState
