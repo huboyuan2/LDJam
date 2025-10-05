@@ -7,6 +7,33 @@ using System;
 
 public class CharacterCtrl : MonoBehaviour
 {
+    private static CharacterCtrl _instance;
+
+    public static CharacterCtrl Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<CharacterCtrl>();
+
+                if (_instance == null)
+                {
+                    Debug.LogWarning("[CharacterCtrl] No CharacterCtrl found in scene!");
+                }
+            }
+            return _instance;   
+        }
+    }
+    Vector2 curRebirthPlace;
+    public Vector2 CurRebirthPlace
+    {
+        get => curRebirthPlace;
+        set
+        {
+            curRebirthPlace = value;
+        }
+    }
     public float JumpForce { get; set; } = 36f;
     public float MoveSpeed { get; set; } = 9f;
     public LayerMask groundLayer; // Ground layer
@@ -111,6 +138,7 @@ public class CharacterCtrl : MonoBehaviour
         _timeJumpWasPressed = float.NegativeInfinity; // so the check is false at spawn
         abilities = GetComponent<CharacterModule>();
         manager = FindFirstObjectByType<GameLogic>();
+        curRebirthPlace = transform.position;
     }
 
     void Update()
@@ -435,6 +463,23 @@ public class CharacterCtrl : MonoBehaviour
         yield return new WaitForSeconds(abilities.dashingCooldown);
         abilities.canDash = true;
     }
+    public void CallRebirth()
+    {
+        //an.SetBool("death", true);
+        StartCoroutine(Rebirth());
+    }
+    IEnumerator Rebirth()
+    {
+        yield return new WaitForSeconds(0.5f);
+        transform.position = CurRebirthPlace;
+        rb.velocity = Vector2.zero;
+        an.SetBool("death", false);
+        manager.returnTimeState();
+        abilities.canDash = true;
+        abilities.canStop = true;
+        abilities.isDashing = false;
+    }
+
     private void ApplyFacingDirection()
     {
         // Apply facing direction while maintaining current Y and Z scale

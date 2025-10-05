@@ -18,6 +18,7 @@ public class TriggerTrap : MonoBehaviour
             CharacterModule.Instance.TimeLeft += tm.time;
             if (tm.lethality)
             {
+                CharacterCtrl.Instance.CallRebirth();
                 //CharacterModule.Instance.Health -= 1;
                 //if (CharacterModule.Instance.Health <= 0)
                 //{
@@ -26,7 +27,9 @@ public class TriggerTrap : MonoBehaviour
                 //}
             }
             if (tm.isProjectile)
-            gameObject.SetActive(false);
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 }
