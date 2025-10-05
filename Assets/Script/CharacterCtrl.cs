@@ -193,6 +193,7 @@ public class CharacterCtrl : MonoBehaviour
                 Sequence landSequence = DOTween.Sequence();
                 landSequence.Append(transform.DOScale(landScaleWithDirection, landScaleDuration).SetEase(Ease.OutQuad));
                 landSequence.Append(transform.DOScale(normalScaleWithDirection, landRecoverDuration).SetEase(Ease.OutBack));
+                an.SetBool("jump", true);
                 wasGrounded = true;
             }
             isGrounded = true;
@@ -279,7 +280,7 @@ public class CharacterCtrl : MonoBehaviour
         _frameVelocity.y = JumpForce;
 
         // Play jump animation
-        an.SetTrigger("jump");
+        an.SetBool("jump", true);
 
         // Jump scale animation (thin and tall)
         DOTween.Kill(transform); // Kill all current transform tweens to avoid conflicts
