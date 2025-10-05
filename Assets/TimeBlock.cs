@@ -39,7 +39,15 @@ public class TimeBlock : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (!list.IsEmpty() || States.Count == 0)
+        if (reference.current == GameLogic.TimeState.Paused)
+        {
+            list.Paused = true;
+        }
+        else
+        {
+            list.Paused = false;
+        }
+        if (!list.IsEmpty() || States.Count == 0 || reference.current == GameLogic.TimeState.Paused)
         {
             return;
         }
