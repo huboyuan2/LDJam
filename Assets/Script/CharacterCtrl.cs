@@ -7,7 +7,7 @@ using System;
 
 public class CharacterCtrl : MonoBehaviour
 {
-    public float JumpForce { get; set; } = 34f;
+    public float JumpForce { get; set; } = 36f;
     public float MoveSpeed { get; set; } = 9f;
     public LayerMask groundLayer; // Ground layer
     public LayerMask crossLayer; // One-way platform layer
@@ -32,10 +32,12 @@ public class CharacterCtrl : MonoBehaviour
     private Animator an;
     private CapsuleCollider2D col;
     private Vector2 _frameVelocity;
-    private bool _cachedQueryStartInColliders;
     private float _time;
     private FrameInput _frameInput;
-    public Vector2 FrameInput => _frameInput.Move;
+    public Vector2 FrameInput()
+    {
+        return _frameInput.Move;
+    }
     public event Action<bool, float> GroundedChanged;
     public event Action Jumped;
     public float velocityY;
@@ -80,7 +82,14 @@ public class CharacterCtrl : MonoBehaviour
 
     private bool HasBufferedJump()
     {
-        return _bufferedJumpUsable && _time < _timeJumpWasPressed + JumpBuffer;
+        if (_bufferedJumpUsable)
+        {
+            if (_time < _timeJumpWasPressed + JumpBuffer)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private bool CanUseCoyote()
@@ -94,9 +103,10 @@ public class CharacterCtrl : MonoBehaviour
         an = GetComponent<Animator>();
         col = GetComponent<CapsuleCollider2D>();
 
-        _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
         originalScale = new Vector3(1, 1, 1); // Save original scale (without flip)
         currentFacingDirection = transform.localScale.x > 0 ? 1 : -1;
+        _bufferedJumpUsable = false;
+        _timeJumpWasPressed = float.NegativeInfinity; // so the check is false at spawn
     }
 
     void Update()
@@ -205,7 +215,8 @@ public class CharacterCtrl : MonoBehaviour
                 wasGrounded = true;
             }
             isGrounded = true;
-            _coyoteUsable = _bufferedJumpUsable = true;
+            _coyoteUsable = true;
+            _bufferedJumpUsable = true;
             _endedJumpEarly = false;
             LastOneWay = onOneWay ? hitOneWay : null;
             GroundedChanged?.Invoke(true, Mathf.Abs(_frameVelocity.y));
