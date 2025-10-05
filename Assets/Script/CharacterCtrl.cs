@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEditor.Animations;
 
 public class CharacterCtrl : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class CharacterCtrl : MonoBehaviour
     public Vector2 groundCheckOffset = Vector2.zero; // 射线检测起点的偏移量
 
     private Rigidbody2D rb;
+    private Animator an;
     private bool isGrounded = false;
     private bool wasGrounded = false; // 用于检测落地瞬间
     private Vector3 originalScale = Vector3.one; // 存储原始缩放
@@ -31,6 +33,7 @@ public class CharacterCtrl : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        an = GetComponent<Animator>();
         originalScale = new Vector3(1, 1, 1); // 保存原始缩放（不含翻转）
         currentFacingDirection = transform.localScale.x > 0 ? 1 : -1;
     }
@@ -58,17 +61,24 @@ public class CharacterCtrl : MonoBehaviour
     {
         // Horizontal movement
         float moveInput = 0f;
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A)&&(!Input.GetKey(KeyCode.D)))
         {
             moveInput = -1f;
             currentFacingDirection = -1;
             ApplyFacingDirection();
+            an.SetBool("isrunning", true);
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D)&&!(Input.GetKey(KeyCode.A)))
         {
             moveInput = 1f;
             currentFacingDirection = 1;
             ApplyFacingDirection();
+            an.SetBool("isrunning", true);
+        }
+        else
+        {
+            moveInput = 0f;
+            an.SetBool("isrunning", false);
         }
         Vector2 velocity = rb.velocity;
         velocity.x = moveInput * MoveSpeed;
@@ -84,7 +94,7 @@ public class CharacterCtrl : MonoBehaviour
     private void Jump()
     {
         rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
-        
+        an.SetTrigger("jump");
         // 跳跃时变瘦长的动画
         DOTween.Kill(transform); // 杀死当前transform上的所有Tween，避免冲突
         Vector3 targetScale = new Vector3(jumpScale.x * currentFacingDirection, jumpScale.y, jumpScale.z);
