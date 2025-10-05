@@ -17,3 +17,7 @@ MonoBehaviour:
     time: -10
     lethality: 1
     isProjectile: 0
+  - name: 
+    time: -30
+    lethality: 1
+    isProjectile: 0
