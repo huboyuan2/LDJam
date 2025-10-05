@@ -66,6 +66,11 @@ public class ActionList : MonoBehaviour
         AddAction(new ScaleAction(Goal, target, id, TimeToComplete, delay, block, ease));
     }
 
+    public void AddShakeAction(GameObject target, float magnitude, float TimeToComplete = 1, int id = 0, float delay = 0, float opa = 0, bool block = false, BaseAction.EaseType ease = BaseAction.EaseType.Linear)
+    {
+        AddAction(new ShakeAction(target, magnitude, TimeToComplete, id, delay, opa, block, ease));
+    }
+
     void AddAction(BaseAction action)
     {
         list.Add(action);
@@ -131,13 +136,67 @@ public class ActionList : MonoBehaviour
     }
 }
 
+public class ShakeAction : BaseAction
+{
+    Vector2 oldTransform;
+    float mag = 0;
+
+    float Speed { get; set; }
+
+    bool FirstTime;
+    // Start is called before the first frame update
+    public ShakeAction(GameObject target, float magnitude, float TimeToComplete, int id, float _delay, float opa, bool block,BaseAction.EaseType Type)
+    {
+        this.obj = target;
+        this.mag = magnitude;
+        FirstTime = true;
+        this.LifeSpan = TimeToComplete;
+        this.delay = _delay;
+        Easing = Type;
+        groupID = id;
+        Block = block;
+    }
+    // Update is called once per frame
+    public override ActionResult Update(float dt)
+    {
+        if (delay <= 0)
+        {
+            if (FirstTime)
+            {
+                oldTransform = obj.transform.position;
+
+                FirstTime = false;
+            }
+            Vector2 pos = oldTransform;
+            pos.y += UnityEngine.Random.Range(-mag, mag);
+            obj.transform.position = pos;
+            if (Percent >= 1)
+            {
+                obj.transform.position = oldTransform;
+                return ActionResult.Success;
+            }
+            else
+            {
+                return ActionResult.OnGoing;
+            }
+        }
+        else
+        {
+            delay -= Time.deltaTime;
+            return ActionResult.OnGoing;
+        }
+    }
+
+}
+
+
 public class ScaleAction : BaseAction
 {
     Vector3 StartScale;
     Vector3 EndScale;
 
     // Start is called before the first frame update
-    public ScaleAction(Vector3 Goal, GameObject target, int id, float lifeSpan, float delay, bool block, EaseType ease)
+    public ScaleAction(Vector3 Goal, GameObject target, int id, float lifeSpan, float _delay, bool block, EaseType ease)
     {
         EndScale = Goal;
         obj = target;
@@ -145,6 +204,7 @@ public class ScaleAction : BaseAction
         Block = block;
         Easing = ease;
         groupID = id;
+        delay = _delay;
     }
     public override ActionResult Update(float dt)
     {
@@ -188,7 +248,7 @@ public class RotateAction : BaseAction
     Vector3 EndAngle;
 
     // Start is called before the first frame update
-    public RotateAction(Vector3 Goal, GameObject target, int id, float lifeSpan, float delay, bool block, EaseType ease)
+    public RotateAction(Vector3 Goal, GameObject target, int id, float lifeSpan, float _delay, bool block, EaseType ease)
     {
         EndAngle = Goal;
         obj = target;
@@ -196,6 +256,7 @@ public class RotateAction : BaseAction
         Block = block;
         Easing = ease;
         groupID = id;
+        delay = _delay;
     }
     public override ActionResult Update(float dt)
     {
@@ -241,7 +302,7 @@ public class TranslateAction : BaseAction
     Vector3 EndPosition;
 
     // Start is called before the first frame update
-    public TranslateAction(Vector3 Goal, GameObject target, int id, float lifeSpan, float delay, bool block, EaseType ease)
+    public TranslateAction(Vector3 Goal, GameObject target, int id, float lifeSpan, float _delay, bool block, EaseType ease)
     {
         EndPosition = Goal;
         obj = target;
@@ -249,6 +310,7 @@ public class TranslateAction : BaseAction
         Block = block;
         Easing = ease;
         groupID = id;
+        delay = _delay;
     }
     public override ActionResult Update(float dt)
     {
