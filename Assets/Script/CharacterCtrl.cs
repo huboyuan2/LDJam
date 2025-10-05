@@ -79,15 +79,9 @@ public class CharacterCtrl : MonoBehaviour
     private Transform currentPlatform; // Current moving platform we're standing on
     private Vector3 lastPlatformPosition; // Last frame platform world position
     private Quaternion lastPlatformRotation; // Last frame platform rotation (optional)
-    private bool canDash = true;
-    private bool isDashing;
-    [Tooltip("Determine how far the player dashes")]
-    public float dashingPower = 24f;
-    [Tooltip("Time during which dash is active and player can't do inputs")]
-    public float dashingTime = 0.2f;
-    [Tooltip("How long before they can dash again, granted that they still have charges left")]
-    public float dashingCooldown = 1f;
+
     private CharacterModule abilities;
+    private GameLogic manager;
     private bool HasBufferedJump()
     {
         if (_bufferedJumpUsable)
@@ -116,11 +110,12 @@ public class CharacterCtrl : MonoBehaviour
         _bufferedJumpUsable = false;
         _timeJumpWasPressed = float.NegativeInfinity; // so the check is false at spawn
         abilities = GetComponent<CharacterModule>();
+        manager = FindFirstObjectByType<GameLogic>();
     }
 
     void Update()
     {
-        if (isDashing)
+        if (abilities.isDashing)
         {
             return;
         }
@@ -131,7 +126,7 @@ public class CharacterCtrl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isDashing)
+        if (abilities.isDashing)
         {
             return;
         }
@@ -397,32 +392,48 @@ public class CharacterCtrl : MonoBehaviour
             JumpHeld = Input.GetKey(KeyCode.W),
             Move = direction
         };
-
         if (_frameInput.JumpDown)
         {
             _jumpToConsume = true;
             _timeJumpWasPressed = _time;
         }
-        if (abilities.SkillDash > 0 && canDash && Input.GetKeyDown(KeyCode.LeftShift) )
+        //KEY INPUT FOR TIME STOP SKILL
+        if (abilities.SkillStop > 0 && abilities.canStop && Input.GetKeyDown(KeyCode.Q))
+        {
+            StartCoroutine(TimeStop());
+        }
+        //KEY INPUT FOR DASH
+        if (abilities.SkillDash > 0 && abilities.canDash && Input.GetKeyDown(KeyCode.LeftShift) )
         {
             StartCoroutine(Dash());
         }
     }
+
+    private IEnumerator TimeStop()
+    {
+        abilities.SkillStop -= 1;
+        manager.pauseTime();
+        abilities.canStop = false;
+        yield return new WaitForSeconds(abilities.TimeStopDuration);
+        manager.returnTimeState();
+        abilities.canStop = true;
+    }
+
     private IEnumerator Dash()
     {
-        canDash = false;
-        isDashing = true;
+        abilities.canDash = false;
+        abilities.isDashing = true;
         abilities.SkillDash -= 1;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
-        rb.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
+        rb.velocity = new Vector2(transform.localScale.x * abilities.dashingPower, 0f);
 
-        yield return new WaitForSeconds(dashingTime);
+        yield return new WaitForSeconds(abilities.dashingTime);
 
         rb.gravityScale = originalGravity;
-        isDashing = false;
-        yield return new WaitForSeconds(dashingCooldown);
-        canDash = true;
+        abilities.isDashing = false;
+        yield return new WaitForSeconds(abilities.dashingCooldown);
+        abilities.canDash = true;
     }
     private void ApplyFacingDirection()
     {

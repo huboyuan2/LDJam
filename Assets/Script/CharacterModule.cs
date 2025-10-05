@@ -27,7 +27,24 @@ public class CharacterModule : MonoBehaviour
     }
     public static event System.Action<int> OnDashChanged;
     public static event System.Action<int> OnRewindChanged;
-    public static event System.Action<int> OnStopChanged;   
+    public static event System.Action<int> OnStopChanged;
+    //Abilities parameters
+    [HideInInspector]
+    public bool canDash = true;
+    [HideInInspector]
+    public bool isDashing;
+    [HideInInspector]
+    public bool canStop = true;
+    [Tooltip("Determine how far the player dashes")]
+    public float dashingPower = 24f;
+    [Tooltip("Time during which dash is active and player can't do inputs")]
+    public float dashingTime = 0.2f;
+    [Tooltip("How long before they can dash again, granted that they still have charges left")]
+    public float dashingCooldown = 1f;
+
+    [Tooltip("How long time stop will work for")]
+    public float TimeStopDuration = 6f;
+
     // Private backing fields
     private int _skillRewind;
     private int _skillDash;
