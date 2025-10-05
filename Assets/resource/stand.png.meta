@@ -113,19 +113,19 @@ TextureImporter:
       name: stand_0
       rect:
         serializedVersion: 2
-        x: 8
+        x: 7
         y: 5
         width: 22
         height: 34
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bd5f4421f985fa84da0879f08e7d0ef4
-      internalID: -1501700191
+      spriteID: 1a4e5ebd9199b1d438e14f21247af0a0
+      internalID: 290153657
       vertices: []
       indices: 
       edges: []
@@ -134,19 +134,61 @@ TextureImporter:
       name: stand_1
       rect:
         serializedVersion: 2
-        x: 35
+        x: 33
         y: 5
         width: 22
         height: 35
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1af59e8f5a8974945962fefccffc8b74
-      internalID: -930821723
+      spriteID: ddfcf30125ecb1f47a6235eb36de6bd2
+      internalID: 1552637515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stand_2
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 5
+        width: 23
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9eaa7f44d760a9e4489bd185269b81e8
+      internalID: 677160574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stand_3
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 5
+        width: 22
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2cfe7585cdab314b9283ee9f5957739
+      internalID: 584200068
       vertices: []
       indices: 
       edges: []
@@ -162,8 +204,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      stand_0: -1501700191
-      stand_1: -930821723
+      stand_0: 290153657
+      stand_1: 1552637515
+      stand_2: 677160574
+      stand_3: 584200068
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
