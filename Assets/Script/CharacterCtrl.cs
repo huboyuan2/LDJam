@@ -38,7 +38,7 @@ public class CharacterCtrl : MonoBehaviour
     public Vector2 FrameInput => _frameInput.Move;
     public event Action<bool, float> GroundedChanged;
     public event Action Jumped;
-
+    public float velocityY;
     // Variables for jumping
     private bool _jumpToConsume;
     private bool _bufferedJumpUsable;
@@ -78,8 +78,15 @@ public class CharacterCtrl : MonoBehaviour
     private Vector3 lastPlatformPosition; // Last frame platform world position
     private Quaternion lastPlatformRotation; // Last frame platform rotation (optional)
 
-    private bool HasBufferedJump => _bufferedJumpUsable && _time < _timeJumpWasPressed + JumpBuffer;
-    private bool CanUseCoyote => _coyoteUsable && !isGrounded && _time < _frameLeftGrounded + CoyoteTime;
+    private bool HasBufferedJump()
+    {
+        return _bufferedJumpUsable && _time < _timeJumpWasPressed + JumpBuffer;
+    }
+
+    private bool CanUseCoyote()
+    {
+        return _coyoteUsable && !isGrounded && _time < _frameLeftGrounded + CoyoteTime;
+    }
 
     private void Awake()
     {
@@ -94,6 +101,7 @@ public class CharacterCtrl : MonoBehaviour
 
     void Update()
     {
+        velocityY = rb.velocity.y;
         _time += Time.deltaTime;
         GatherInput();
     }
@@ -259,11 +267,20 @@ public class CharacterCtrl : MonoBehaviour
 
     private void HandleJump()
     {
-        if (!_endedJumpEarly && !isGrounded && !_frameInput.JumpHeld && rb.velocity.y > 0) _endedJumpEarly = true;
+        if (!_endedJumpEarly && !isGrounded && !_frameInput.JumpHeld && rb.velocity.y > 0)
+        {
+            _endedJumpEarly = true;
+        }
 
-        if (!_jumpToConsume && !HasBufferedJump) return;
+        if (!_jumpToConsume && !HasBufferedJump())
+        {
+            return;
+        }
 
-        if (isGrounded || CanUseCoyote) ExecuteJump();
+        if (isGrounded || CanUseCoyote())
+        {
+            ExecuteJump();
+        }
 
         _jumpToConsume = false;
     }
