@@ -148,7 +148,6 @@ public class CamVignetteAction : BaseAction
     float _ca;
     float _oldWeight;
     GameLogic reference;
-    bool FirstTime;
     // Start is called before the first frame update
     public CamVignetteAction(GameLogic mgr, Volume volume, float Duration, float vig, float ca, int id, float _delay, bool block = false)
     {
@@ -156,7 +155,6 @@ public class CamVignetteAction : BaseAction
         target = volume;
         _vig = vig;
         _ca = ca;
-        FirstTime = true;
         this.LifeSpan = Duration;
         this.delay = _delay;
 
@@ -168,7 +166,7 @@ public class CamVignetteAction : BaseAction
     {
         if (delay <= 0)
         {
-            if (FirstTime)
+            if (firstTime)
             {
                 _original = target.profile;
                 if (_original.TryGet(out Vignette vig))
@@ -183,11 +181,12 @@ public class CamVignetteAction : BaseAction
                     ca.active = true;
                     ca.intensity.Override(_ca);
                 }
+
+                target.weight = 1f;
                 firstTime = false;
             }
             if (reference.current != GameLogic.TimeState.Paused)
             {
-                _original = target.profile;
                 if (_original.TryGet(out Vignette vig))
                 {
                     vig.active = false;
@@ -223,13 +222,11 @@ public class ShakeAction : BaseAction
 
     float Speed { get; set; }
 
-    bool FirstTime;
     // Start is called before the first frame update
     public ShakeAction(GameObject target, float magnitude, float TimeToComplete, int id, float _delay, float opa, bool block,BaseAction.EaseType Type)
     {
         this.obj = target;
         this.mag = magnitude;
-        FirstTime = true;
         this.LifeSpan = TimeToComplete;
         this.delay = _delay;
         Easing = Type;
@@ -241,11 +238,11 @@ public class ShakeAction : BaseAction
     {
         if (delay <= 0)
         {
-            if (FirstTime)
+            if (firstTime)
             {
                 oldTransform = obj.transform.position;
 
-                FirstTime = false;
+                firstTime = false;
             }
             Vector2 pos = oldTransform;
             pos.y += UnityEngine.Random.Range(-mag, mag);
