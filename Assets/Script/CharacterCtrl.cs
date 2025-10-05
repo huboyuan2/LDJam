@@ -440,10 +440,10 @@ public class CharacterCtrl : MonoBehaviour
     private IEnumerator TimeStop()
     {
         abilities.SkillStop -= 1;
-        manager.pauseTime();
+ //       manager.pauseTime();
         abilities.canStop = false;
         yield return new WaitForSeconds(abilities.TimeStopDuration);
-        manager.returnTimeState();
+ //       manager.returnTimeState();
         abilities.canStop = true;
     }
 
@@ -474,7 +474,7 @@ public class CharacterCtrl : MonoBehaviour
         transform.position = CurRebirthPlace;
         rb.velocity = Vector2.zero;
         an.SetBool("death", false);
-        manager.returnTimeState();
+  //      manager.returnTimeState();
         abilities.canDash = true;
         abilities.canStop = true;
         abilities.isDashing = false;
