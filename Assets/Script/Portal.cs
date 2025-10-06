@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Portal : MonoBehaviour
 {
@@ -14,9 +15,9 @@ public class Portal : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && Input.GetKeyDown(KeyCode.DownArrow))
+        if (collision.CompareTag("Player") )
         {
-            //GameMgr.Instance.NextLevel();
+            NextLevel();
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -31,5 +32,21 @@ public class Portal : MonoBehaviour
     {
         Debug.Log("ShowHint: " + show);
         // Implement hint display logic here
+    }
+    void NextLevel()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = currentSceneIndex + 1;
+        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(nextSceneIndex);
+        }
+        else
+        {
+            Debug.Log("Last level reached. No more levels to load.");
+            GameLogic.Instance.Win();
+            // Optionally, you can loop back to the first level or show a game completion screen
+            // SceneManager.LoadScene(0); // Uncomment to loop back to the first level
+        }
     }
 }

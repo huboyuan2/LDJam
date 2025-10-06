@@ -44,7 +44,8 @@ public class CharacterModule : MonoBehaviour
 
     [Tooltip("How long time stop will work for")]
     public float TimeStopDuration = 6f;
-
+    [Tooltip("How long time Rewind will work for")]
+    public float TimeRewindDuration = 6f;
     // Private backing fields
     private int _skillRewind;
     private int _skillDash;
@@ -86,6 +87,8 @@ public class CharacterModule : MonoBehaviour
         get => _skillDash;
         set
         {
+            if(value>1)
+                value = 1;
             if (_skillDash != value)
             {
                 int oldValue = _skillDash;
@@ -136,7 +139,7 @@ public class CharacterModule : MonoBehaviour
     // Value change callback function
     private void OnValueChange(string propertyName, int oldValue, int newValue)
     {
-        Debug.Log($"[CharacterModule] {propertyName} changed: {oldValue} -> {newValue}");
+        //Debug.Log($"[CharacterModule] {propertyName} changed: {oldValue} -> {newValue}");
         
         // Add your custom logic here based on which property changed
         switch (propertyName)
@@ -188,8 +191,16 @@ public class CharacterModule : MonoBehaviour
     }
     private void OnTimeLeftChanged(float oldValue, float newValue)
     {
-        string newTimeText = CountDown.GetTimeText(newValue);
-        CountDown.InvokeTimeChange(newTimeText);
+        if (newValue <= 0)
+        {
+            //ReloadLevel
+            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        }
+        else
+        {
+            string newTimeText = CountDown.GetTimeText(newValue);
+            CountDown.InvokeTimeChange(newTimeText);
+        }
         // Custom logic for time left changes
     }
 }

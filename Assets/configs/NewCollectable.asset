@@ -19,8 +19,8 @@ MonoBehaviour:
     skillRewind: 1
     skillDash: 0
     skillStop: 0
-    isRenewable: 0
-    coolDown: 3
+    isRenewable: 1
+    coolDown: 20
   - moduleName: 
     moduleID: 0
     time: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
     skillDash: 1
     skillStop: 0
     isRenewable: 1
-    coolDown: 3
+    coolDown: 10
   - moduleName: 
     moduleID: 0
     time: 0
@@ -43,8 +43,8 @@ MonoBehaviour:
     skillRewind: 0
     skillDash: 0
     skillStop: 0
-    isRenewable: 0
-    coolDown: 3
+    isRenewable: 1
+    coolDown: 15
   - moduleName: TutorialRewind
     moduleID: 4
     time: 10

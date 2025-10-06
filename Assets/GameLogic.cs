@@ -21,8 +21,8 @@ public class GameLogic : MonoBehaviour
             return _instance;
         }
     }
-
-    GameObject player;
+    GameObject winUI;
+     public GameObject player;
     ActionList actionList;
 
     public enum TimeState
@@ -54,7 +54,8 @@ public class GameLogic : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        current = TimeState.Advancing;
+        //DontDestroyOnLoad(gameObject);
     }
 
     // Start is called before the first frame update
@@ -102,7 +103,15 @@ public class GameLogic : MonoBehaviour
     {
 
     }
+    public void Win()
+    {
 
+        if (winUI)
+        {
+            winUI.SetActive(true);
+        }
+        pauseTime();
+    }
     public void MoveObj(Vector3 Goal, GameObject target, float TimeToComplete = 1, int id = 0, float delay = 0, bool block = false, BaseAction.EaseType ease = BaseAction.EaseType.Linear)
     {
         actionList.AddTranslateAction(Goal, target, TimeToComplete, id, delay, block, ease);

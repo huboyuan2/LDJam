@@ -69,7 +69,7 @@ Material:
     - _EnableExternalAlpha: 0
     - _amplitude: -0.06
     - _pixsize: 0.04
-    - _surfacehight: 0
+    - _surfacehight: -15.3
     - _wavelength: 0.59
     - _wavespeed: 4.1
     m_Colors:

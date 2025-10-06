@@ -11,11 +11,14 @@ public class CountDown : MonoBehaviour
     public TimeState timeState = TimeState.Running;
 
     public static event System.Action<string> OnTimeChanged;
-    void Start()
+    void Awake()
     {
-        
+        GameLogic.Instance.OnTimeStateChanged += HandleTimeStateChange;
     }
-
+    void HandleTimeStateChange(int newState)
+    {
+        timeState = (TimeState)newState;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -44,8 +47,9 @@ public class CountDown : MonoBehaviour
     }
     public enum TimeState
     {
-        Running,
+        
         Rewinding,
+        Running,
         Stopped
     }   
     //private void OnTimeStringChanged()

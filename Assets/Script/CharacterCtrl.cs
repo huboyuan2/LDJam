@@ -430,8 +430,9 @@ public class CharacterCtrl : MonoBehaviour
         //KEY INPUT FOR TIME STOP SKILL
         if (abilities.SkillRewind > 0 && Input.GetKeyDown(KeyCode.R))
         {
-            manager.TriggerTimeState();
-            abilities.SkillRewind -= 1;
+            StartCoroutine(TimeRewind());
+            //manager.TriggerTimeState();
+            //abilities.SkillRewind -= 1;
         }
         if (abilities.SkillStop > 0 && abilities.canStop && Input.GetKeyDown(KeyCode.Q))
         {
@@ -443,7 +444,17 @@ public class CharacterCtrl : MonoBehaviour
             StartCoroutine(Dash());
         }
     }
-
+    private IEnumerator TimeRewind()
+    {
+        if((int)manager.current==1)
+        {
+            abilities.SkillRewind -= 1;
+            manager.TriggerTimeState();
+            yield return new WaitForSeconds(abilities.TimeRewindDuration);
+            manager.TriggerTimeState();
+        }
+        yield return null;
+    }
     private IEnumerator TimeStop()
     {
         abilities.SkillStop -= 1;

@@ -13,6 +13,11 @@ public class TriggerAdd : MonoBehaviour
             CollectableModule cm = CollectableMgr.Instance.collectableSO.collectableModules[index];
             CharacterModule.Instance.SkillRewind += cm.skillRewind;
             CharacterModule.Instance.SkillDash += cm.skillDash;
+            if (cm.skillDash > 0)
+            {
+                // Handle dash skill
+                CharacterModule.Instance.canDash = true;
+            }
             CharacterModule.Instance.SkillStop += cm.skillStop;
             CharacterModule.Instance.TimeLeft += cm.time;
             //CharacterModule.Instance.Health += 1;
