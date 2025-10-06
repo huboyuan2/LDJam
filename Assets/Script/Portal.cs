@@ -39,6 +39,8 @@ public class Portal : MonoBehaviour
         int nextSceneIndex = currentSceneIndex + 1;
         if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
         {
+            GameObject.FindFirstObjectByType<GameLogic>().gameObject.GetComponent<CountDown>().enabled = true;
+            GameObject.FindFirstObjectByType<GameLogic>().gameObject.GetComponent<CountDown>().timeState = CountDown.TimeState.Rewinding;
             NextSceneData.Score = CharacterModule.Instance.TimeLeft;
             SceneManager.LoadScene(nextSceneIndex);
         }

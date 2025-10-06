@@ -23,7 +23,7 @@ public class CountDown : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        GameLogic.Instance.OnTimeStateChanged += HandleTimeStateChange;
         //if (timeState == TimeState.Running)
         CharacterModule.Instance.TimeLeft -= Time.deltaTime;
         //else if (timeState == TimeState.Rewinding)

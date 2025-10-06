@@ -19,7 +19,7 @@ public class CharacterModule : MonoBehaviour
                 {
                     GameObject singletonObject = new GameObject("CharacterModule");
                     _instance = singletonObject.AddComponent<CharacterModule>();
-                    DontDestroyOnLoad(singletonObject);
+                    //DontDestroyOnLoad(singletonObject);
                 }
             }
             return _instance;

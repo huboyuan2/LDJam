@@ -20,7 +20,7 @@ public class SoundMgr : MonoBehaviour
                 {
                     GameObject singletonObject = new GameObject("SoundMgr");
                     _instance = singletonObject.AddComponent<SoundMgr>();
-                    DontDestroyOnLoad(singletonObject);
+                    //DontDestroyOnLoad(singletonObject);
                 }
             }
             return _instance;
@@ -38,7 +38,7 @@ public class SoundMgr : MonoBehaviour
         }
 
         _instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     public List<AudioClip> soundClips;

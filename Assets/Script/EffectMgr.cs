@@ -20,7 +20,7 @@ public class EffectMgr : MonoBehaviour
                 {
                     GameObject singletonObject = new GameObject("EffectMgr");
                     _instance = singletonObject.AddComponent<EffectMgr>();
-                    DontDestroyOnLoad(singletonObject);
+                    //DontDestroyOnLoad(singletonObject);
                 }
             }
             return _instance;
@@ -58,7 +58,7 @@ public class EffectMgr : MonoBehaviour
         }
 
         _instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     // Start is called before the first frame update
