@@ -64,7 +64,7 @@ public class TimeBlock : MonoBehaviour
         {
             return;
         }
-        if (reference.current == GameLogic.TimeState.Paused && type == Type.Rotate)
+        if (reference.current != GameLogic.TimeState.Paused && type == Type.Rotate)
         {
             transform.Rotate(degreesPerSecond * Time.deltaTime * axis, space);
         }
