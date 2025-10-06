@@ -13,6 +13,7 @@ public class TriggerAdd : MonoBehaviour
             CharacterModule.Instance.SkillRewind += cm.skillRewind;
             CharacterModule.Instance.SkillDash += cm.skillDash;
             CharacterModule.Instance.SkillStop += cm.skillStop;
+            CharacterModule.Instance.TimeLeft += cm.time;
             //CharacterModule.Instance.Health += 1;
             gameObject.SetActive(false);
         }

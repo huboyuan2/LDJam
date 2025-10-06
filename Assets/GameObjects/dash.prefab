@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -7958988577807014626}
   - component: {fileID: -6082812881058447645}
   m_Layer: 0
-  m_Name: coin_0
+  m_Name: dash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1650662776, guid: 030cf6a24f8a37241a7cf2405e7e5cf2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fadb05acd3cd39d4e808f3d2a6262950, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18de87b02057f734db99eb42010a1745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 3
+  index: 1
 --- !u!61 &-6082812881058447645
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -148,9 +148,9 @@ BoxCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
+    border: {x: 0, y: 0, z: 0, w: 0.0625}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.0625, y: 1.0625}
+    oldSize: {x: 3, y: 3}
     newSize: {x: 1.0625, y: 1.0625}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
