@@ -8,7 +8,7 @@ public class CountDownView : MonoBehaviour
     public TMP_Text timeText;
     private void Awake()
     {
-        CountDown.OnTimeChanged += UpdateView;
+        //CountDown.OnTimeChanged += UpdateView;
 
         
     }

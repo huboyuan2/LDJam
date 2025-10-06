@@ -9,11 +9,12 @@ public class CountDown : MonoBehaviour
     //float leftTime = 100.0f;
     string timeText = "1:40";
     public TimeState timeState = TimeState.Running;
-
+    private BarScaler bar;
     public static event System.Action<string> OnTimeChanged;
     void Awake()
     {
         GameLogic.Instance.OnTimeStateChanged += HandleTimeStateChange;
+        bar = FindFirstObjectByType<BarScaler>();
     }
     void HandleTimeStateChange(int newState)
     {
@@ -22,18 +23,25 @@ public class CountDown : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (timeState == TimeState.Running)
-           CharacterModule.Instance.TimeLeft -= Time.deltaTime;
-        else if (timeState == TimeState.Rewinding)
-           CharacterModule.Instance.TimeLeft += Time.deltaTime;
 
-        string newTimeText = GetTimeText(CharacterModule.Instance.TimeLeft);
-        if (newTimeText != timeText)
+        //if (timeState == TimeState.Running)
+        CharacterModule.Instance.TimeLeft -= Time.deltaTime;
+        //else if (timeState == TimeState.Rewinding)
+        //CharacterModule.Instance.TimeLeft += Time.deltaTime;
+        if (bar)
         {
-            timeText = newTimeText;
-            InvokeTimeChange(timeText);
-            //OnTimeStringChanged();
+            bar.InterpolateToScale(CharacterModule.Instance.TimeLeft / 100, 0.1f);
         }
+
+
+
+        //string newTimeText = GetTimeText(CharacterModule.Instance.TimeLeft);
+        //if (newTimeText != timeText)
+        //{
+        //    timeText = newTimeText;
+        //    InvokeTimeChange(timeText);
+        //    //OnTimeStringChanged();
+        //}
     }
     public static void InvokeTimeChange(string newTimeText)
     {

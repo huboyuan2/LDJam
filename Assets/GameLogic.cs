@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal; // or HighDefinition
-
+using UnityEngine.SceneManagement;
+public static class NextSceneData { public static float Score; }
 public class GameLogic : MonoBehaviour
 {
     private static GameLogic _instance;
@@ -22,7 +23,7 @@ public class GameLogic : MonoBehaviour
         }
     }
     GameObject winUI;
-     public GameObject player;
+    public GameObject player;
     ActionList actionList;
 
     public enum TimeState
@@ -55,6 +56,11 @@ public class GameLogic : MonoBehaviour
     private void Awake()
     {
         current = TimeState.Advancing;
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            GetComponent<CountDown>().enabled = true;
+            GetComponent<CountDown>().timeState = CountDown.TimeState.Rewinding;
+        }
         //DontDestroyOnLoad(gameObject);
     }
 
@@ -101,11 +107,14 @@ public class GameLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
     public void Win()
     {
-
+        NextSceneData.Score = CharacterModule.Instance.TimeLeft;
         if (winUI)
         {
             winUI.SetActive(true);

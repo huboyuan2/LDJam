@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using UnityEditor.Animations;
+using UnityEditor;
+using UnityEngine.Animations;     
 using System;
 
 public class CharacterCtrl : MonoBehaviour
