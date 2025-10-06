@@ -81,27 +81,25 @@ public class GameLogic : MonoBehaviour
         current = saved;
     }
 
-    public void TriggerTimeState()
+    // Update is called once per frame
+    void Update()
     {
         if (current == TimeState.Paused)
         {
             return;
         }
-
-        if (current == TimeState.Reversing)
+        //just testing
+        if (Input.GetKeyDown(KeyCode.K))
         {
-            current = TimeState.Advancing;
+            if (current == TimeState.Reversing)
+            {
+                current = TimeState.Advancing;
+            }
+            else if (current == TimeState.Advancing)
+            {
+                current = TimeState.Reversing;
+            }
         }
-        else if (current == TimeState.Advancing)
-        {
-            current = TimeState.Reversing;
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void MoveObj(Vector3 Goal, GameObject target, float TimeToComplete = 1, int id = 0, float delay = 0, bool block = false, BaseAction.EaseType ease = BaseAction.EaseType.Linear)
