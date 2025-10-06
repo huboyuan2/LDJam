@@ -440,18 +440,19 @@ public class CharacterCtrl : MonoBehaviour
     private IEnumerator TimeStop()
     {
         abilities.SkillStop -= 1;
- //       manager.pauseTime();
+        manager.pauseTime();
         abilities.canStop = false;
         yield return new WaitForSeconds(abilities.TimeStopDuration);
- //       manager.returnTimeState();
+        manager.returnTimeState();
         abilities.canStop = true;
     }
 
     private IEnumerator Dash()
     {
+        an.SetTrigger("dash");
         abilities.canDash = false;
         abilities.isDashing = true;
-        abilities.SkillDash -= 1;
+        //abilities.SkillDash -= 1;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
         rb.velocity = new Vector2(transform.localScale.x * abilities.dashingPower, 0f);
@@ -470,11 +471,13 @@ public class CharacterCtrl : MonoBehaviour
     }
     IEnumerator Rebirth()
     {
+        abilities.canDash = false;
+        an.SetTrigger("die");
         yield return new WaitForSeconds(0.5f);
         transform.position = CurRebirthPlace;
         rb.velocity = Vector2.zero;
         an.SetBool("death", false);
-  //      manager.returnTimeState();
+        //manager.returnTimeState();
         abilities.canDash = true;
         abilities.canStop = true;
         abilities.isDashing = false;

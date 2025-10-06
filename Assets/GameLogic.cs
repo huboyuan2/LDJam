@@ -48,7 +48,7 @@ public class GameLogic : MonoBehaviour
             return;
         }
         //just testing
-        if (Input.GetKeyDown(KeyCode.K))
+        //if (Input.GetKeyDown(KeyCode.K))
         {
             if (current == TimeState.Reversing)
             {
