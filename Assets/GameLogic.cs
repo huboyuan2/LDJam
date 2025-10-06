@@ -32,7 +32,7 @@ public class GameLogic : MonoBehaviour
         Paused
     }
 
-    private TimeState _current = TimeState.Reversing;
+    public TimeState _current = TimeState.Reversing;
 
     // Event: invoked when time state changes, passes new state as int
     public Action<int> OnTimeStateChanged;
@@ -81,25 +81,26 @@ public class GameLogic : MonoBehaviour
         current = saved;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TriggerTimeState()
     {
         if (current == TimeState.Paused)
         {
             return;
         }
-        //just testing
-        if (Input.GetKeyDown(KeyCode.K))
+        if (current == TimeState.Reversing)
         {
-            if (current == TimeState.Reversing)
-            {
-                current = TimeState.Advancing;
-            }
-            else if (current == TimeState.Advancing)
-            {
-                current = TimeState.Reversing;
-            }
+            current = TimeState.Advancing;
         }
+        else if (current == TimeState.Advancing)
+        {
+            current = TimeState.Reversing;
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 
     public void MoveObj(Vector3 Goal, GameObject target, float TimeToComplete = 1, int id = 0, float delay = 0, bool block = false, BaseAction.EaseType ease = BaseAction.EaseType.Linear)
