@@ -11,7 +11,8 @@ public class CollectableModule
     public int skillRewind;
     public int skillDash;
     public int skillStop;
-    public bool isCollected = false;
+    public bool isRenewable = false;
+    public float coolDown = 3f;
 }
 [System.Serializable]
 public class  TrapModule
