@@ -34,3 +34,10 @@ MonoBehaviour:
     skillDash: 0
     skillStop: 1
     isCollected: 0
+  - moduleName: 
+    moduleID: 0
+    time: 10
+    skillRewind: 0
+    skillDash: 0
+    skillStop: 0
+    isCollected: 0

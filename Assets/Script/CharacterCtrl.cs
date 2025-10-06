@@ -253,6 +253,8 @@ public class CharacterCtrl : MonoBehaviour
                 landSequence.Append(transform.DOScale(normalScaleWithDirection, landRecoverDuration).SetEase(Ease.OutBack));
                 an.SetBool("jump", true);
                 wasGrounded = true;
+                if (abilities.SkillDash==0)
+                { abilities.SkillDash += 1; }
             }
             isGrounded = true;
             _coyoteUsable = true;
@@ -452,7 +454,7 @@ public class CharacterCtrl : MonoBehaviour
         an.SetTrigger("dash");
         abilities.canDash = false;
         abilities.isDashing = true;
-        //abilities.SkillDash -= 1;
+        abilities.SkillDash -= 1;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
         rb.velocity = new Vector2(transform.localScale.x * abilities.dashingPower, 0f);
