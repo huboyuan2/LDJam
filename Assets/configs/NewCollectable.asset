@@ -19,18 +19,29 @@ MonoBehaviour:
     skillRewind: 1
     skillDash: 0
     skillStop: 0
-    isCollected: 0
+    isRenewable: 0
+    coolDown: 3
   - moduleName: 
     moduleID: 0
     time: 0
     skillRewind: 0
     skillDash: 1
     skillStop: 0
-    isCollected: 0
+    isRenewable: 1
+    coolDown: 3
   - moduleName: 
     moduleID: 0
     time: 0
     skillRewind: 0
     skillDash: 0
     skillStop: 1
-    isCollected: 0
+    isRenewable: 0
+    coolDown: 3
+  - moduleName: 
+    moduleID: 0
+    time: 10
+    skillRewind: 0
+    skillDash: 0
+    skillStop: 0
+    isRenewable: 0
+    coolDown: 3
