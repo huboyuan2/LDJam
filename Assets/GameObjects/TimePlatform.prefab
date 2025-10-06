@@ -100,21 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b975db51e68bf54680e689179901e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  States:
-  - position: {x: 6.755856, y: 8.61, z: 0}
-    scale: {x: 0, y: 0, z: 0}
-    eulerDegrees: {x: 0, y: 0, z: 0}
-    TimeToThisFrame: 0
-    easeRotate: 0
-    easeTranslate: 0
-    easeScale: 0
-  - position: {x: 11.6, y: 4.08, z: 0}
-    scale: {x: 0, y: 0, z: 0}
-    eulerDegrees: {x: 0, y: 0, z: 0}
-    TimeToThisFrame: 0
-    easeRotate: 0
-    easeTranslate: 0
-    easeScale: 0
+  States: []
 --- !u!114 &6505437466252454644
 MonoBehaviour:
   m_ObjectHideFlags: 0
