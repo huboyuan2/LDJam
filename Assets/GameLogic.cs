@@ -1,20 +1,62 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal; // or HighDefinition
+
 public class GameLogic : MonoBehaviour
 {
+    private static GameLogic _instance;
+
+    public static GameLogic Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<GameLogic>();
+
+            }
+            return _instance;
+        }
+    }
+
     GameObject player;
     ActionList actionList;
+
     public enum TimeState
     {
         Reversing,
         Advancing,
         Paused
     }
-    public TimeState current = TimeState.Reversing;
+
+    public TimeState _current = TimeState.Reversing;
+
+    // Event: invoked when time state changes, passes new state as int
+    public Action<int> OnTimeStateChanged;
+
+    public TimeState current
+    {
+        get => _current;
+        set
+        {
+            if (_current != value)
+            {
+                _current = value;
+                OnTimeStateChanged?.Invoke((int)value);
+            }
+        }
+    }
+
     TimeState saved;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,7 +74,6 @@ public class GameLogic : MonoBehaviour
         {
             CamVignetteAction(this, volume, 0, 0.35f, 0.5f, 4);
         }
-
     }
 
     public void returnTimeState()
@@ -40,25 +81,26 @@ public class GameLogic : MonoBehaviour
         current = saved;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TriggerTimeState()
     {
         if (current == TimeState.Paused)
         {
             return;
         }
-        //just testing
-        //if (Input.GetKeyDown(KeyCode.K))
+        if (current == TimeState.Reversing)
         {
-            if (current == TimeState.Reversing)
-            {
-                current = TimeState.Advancing;
-            }
-            else if (current == TimeState.Advancing)
-            {
-                current = TimeState.Reversing;
-            }
+            current = TimeState.Advancing;
         }
+        else if (current == TimeState.Advancing)
+        {
+            current = TimeState.Reversing;
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 
     public void MoveObj(Vector3 Goal, GameObject target, float TimeToComplete = 1, int id = 0, float delay = 0, bool block = false, BaseAction.EaseType ease = BaseAction.EaseType.Linear)
@@ -85,4 +127,5 @@ public class GameLogic : MonoBehaviour
     {
         actionList.AddCamVigAction(mgr, volume, Duration, vig, ca, id, _delay, block);
     }
+
 }

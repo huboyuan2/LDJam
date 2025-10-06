@@ -45,3 +45,19 @@ MonoBehaviour:
     skillStop: 0
     isRenewable: 0
     coolDown: 3
+  - moduleName: TutorialRewind
+    moduleID: 4
+    time: 10
+    skillRewind: 1
+    skillDash: 0
+    skillStop: 0
+    isRenewable: 1
+    coolDown: 3
+  - moduleName: TutorialStop
+    moduleID: 5
+    time: 10
+    skillRewind: 0
+    skillDash: 0
+    skillStop: 1
+    isRenewable: 1
+    coolDown: 3
