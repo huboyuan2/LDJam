@@ -428,6 +428,11 @@ public class CharacterCtrl : MonoBehaviour
             _timeJumpWasPressed = _time;
         }
         //KEY INPUT FOR TIME STOP SKILL
+        if (abilities.SkillRewind > 0 && Input.GetKeyDown(KeyCode.R))
+        {
+            manager.TriggerTimeState();
+            abilities.SkillRewind -= 1;
+        }
         if (abilities.SkillStop > 0 && abilities.canStop && Input.GetKeyDown(KeyCode.Q))
         {
             StartCoroutine(TimeStop());
